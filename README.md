@@ -96,14 +96,7 @@ After extension changes, run `pnpm build` and select **Reload** in Firefox's `ab
 
 ## Documentation
 
-| Document | Purpose |
-| --- | --- |
-| [Architecture](docs/ARCHITECTURE.md) | Components, data flow, trust boundaries, and retention |
-| [Contributing](CONTRIBUTING.md) | Development workflow and pull-request expectations |
-| [Support](SUPPORT.md) | Troubleshooting and safe bug reports |
-| [Security](SECURITY.md) | Vulnerability reporting and sensitive areas |
-| [Code of Conduct](CODE_OF_CONDUCT.md) | Community participation standards |
-| [Changelog](CHANGELOG.md) | Notable project changes |
+See the [documentation index](docs/README.md) for architecture, contributing, support, security, and community guidance. Notable project changes are tracked in the [changelog](CHANGELOG.md).
 
 ## License
 

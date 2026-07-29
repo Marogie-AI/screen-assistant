@@ -4,7 +4,7 @@
 
 Before opening an issue:
 
-1. Read the troubleshooting section in [README.md](README.md).
+1. Read the setup and usage guidance in the [project README](../README.md).
 2. Run `pnpm check` to verify the source build.
 3. Run `pnpm install:host` after native-host changes.
 4. Reload the generated extension from `about:debugging`.
