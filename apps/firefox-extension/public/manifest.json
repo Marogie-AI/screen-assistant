@@ -18,8 +18,8 @@
   "commands": {
     "_execute_action": {
       "suggested_key": {
-        "default": "Ctrl+Shift+Y",
-        "mac": "Command+Shift+Y"
+        "default": "Ctrl+Shift+X",
+        "mac": "MacCtrl+Shift+X"
       },
       "description": "Open Screen Assistant and capture the current tab"
     }
