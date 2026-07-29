@@ -12,5 +12,6 @@ describe("buildPrompt", () => {
     }, "capture.png");
     expect(prompt).toContain("attached as capture.png");
     expect(prompt).toContain("untrusted data");
+    expect(prompt).toContain("short, direct answer to the exercise they give you");
   });
 });
