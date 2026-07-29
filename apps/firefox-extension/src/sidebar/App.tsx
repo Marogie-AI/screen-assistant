@@ -90,7 +90,7 @@ export function App() {
         <section className="warning-card">
           <span className="warning-icon">◉</span>
           <h1>Check the screen before sharing</h1>
-          <p>This extension sends the visible browser screen and selected page context to your locally installed Claude CLI.</p>
+          <p>This extension sends the visible browser screen and selected page context to your locally installed Codex CLI.</p>
           <p>Review the screen for passwords, private messages, financial information, and personal data.</p>
           <button className="primary" onClick={() => void acceptAndCapture()}>I understand — capture screen</button>
         </section>
@@ -127,11 +127,11 @@ export function App() {
             {messages.length === 0 && <p className="hint">Ask what’s happening, what to click next, or for a summary.</p>}
             {messages.map((message, index) => (
               <article className={`message ${message.role}`} key={`${message.role}-${index}`}>
-                <span>{message.role === "user" ? "You" : "Claude"}</span>
+                <span>{message.role === "user" ? "You" : "Codex"}</span>
                 <p>{message.text}</p>
               </article>
             ))}
-            {loading && <article className="message assistant"><span>Claude</span><p className="thinking">Analyzing the screen…</p></article>}
+            {loading && <article className="message assistant"><span>Codex</span><p className="thinking">Analyzing the screen…</p></article>}
           </section>
         </>
       )}

@@ -3,9 +3,9 @@ import { nativeRequestSchema, type AnalyzeRequest, type AnalyzeResponse } from "
 import { NativeMessageDecoder, writeMessage } from "./native-io.js";
 import { normalizeError, HostError } from "./errors.js";
 import { withTemporaryScreenshot } from "./temp-files.js";
-import { runClaude, type RunningClaude } from "./claude.js";
+import { runCodex, type RunningCodex } from "./codex.js";
 
-const active = new Map<string, RunningClaude>();
+const active = new Map<string, RunningCodex>();
 let busy = false;
 
 function send(response: AnalyzeResponse): void {
@@ -20,7 +20,7 @@ async function analyze(request: AnalyzeRequest): Promise<void> {
   busy = true;
   try {
     const answer = await withTemporaryScreenshot(request.screenshotDataUrl, async (directory, screenshotPath) => {
-      const running = runClaude(request, directory, screenshotPath);
+      const running = runCodex(request, directory, screenshotPath);
       active.set(request.requestId, running);
       return running.result;
     });

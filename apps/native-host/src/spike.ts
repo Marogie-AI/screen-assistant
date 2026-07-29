@@ -20,14 +20,17 @@ function run(command: string, args: string[]): Promise<string> {
 
 try {
   await run("magick", ["-size", "640x240", "xc:white", "-fill", "#111827", "-pointsize", "36", "-gravity", "center", "-annotate", "0", "BUILD FAILED\nExit code 42", imagePath]);
-  const output = await run(process.env.CLAUDE_BIN || "claude", [
-    "-p", "Use Read to inspect ./capture.png. State the visible headline and exit code.",
-    "--output-format", "json", "--no-session-persistence", "--permission-mode", "dontAsk", "--tools", "Read"
+  const answerPath = path.join(directory, "answer.txt");
+  await run(process.env.CODEX_BIN || "codex", [
+    "exec", "--image", imagePath, "--sandbox", "read-only", "--ephemeral",
+    "--ignore-user-config", "--ignore-rules", "--skip-git-repo-check", "--color", "never",
+    "--output-last-message", answerPath,
+    "Inspect the attached screenshot. State the visible headline and exit code. Do not use tools."
   ]);
-  const parsed = JSON.parse(output) as { result?: string; is_error?: boolean };
-  if (parsed.is_error || !parsed.result?.includes("42")) throw new Error(parsed.result || "Claude did not identify exit code 42.");
-  console.log(`Vision spike passed: ${parsed.result}`);
+  const { readFile } = await import("node:fs/promises");
+  const answer = await readFile(answerPath, "utf8");
+  if (!answer.includes("42")) throw new Error(answer || "Codex did not identify exit code 42.");
+  console.log(`Vision spike passed: ${answer.trim()}`);
 } finally {
   await rm(directory, { recursive: true, force: true });
 }
-

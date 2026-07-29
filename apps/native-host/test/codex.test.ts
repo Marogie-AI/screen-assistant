@@ -3,31 +3,31 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
-import { runClaude } from "../src/claude.js";
+import { runCodex } from "../src/codex.js";
 
-const originalBin = process.env.CLAUDE_BIN;
+const originalBin = process.env.CODEX_BIN;
 
 afterEach(() => {
-  if (originalBin === undefined) delete process.env.CLAUDE_BIN;
-  else process.env.CLAUDE_BIN = originalBin;
+  if (originalBin === undefined) delete process.env.CODEX_BIN;
+  else process.env.CODEX_BIN = originalBin;
 });
 
-describe("runClaude", () => {
+describe("runCodex", () => {
   it("returns normalized output from a fake executable", async () => {
     const directory = await mkdtemp(path.join(tmpdir(), "screen-assistant-test-"));
     const screenshot = path.join(directory, "capture.png");
-    const fakeClaude = fileURLToPath(new URL("./fixtures/fake-claude.js", import.meta.url));
-    await chmod(fakeClaude, 0o700);
+    const fakeCodex = fileURLToPath(new URL("./fixtures/fake-codex.js", import.meta.url));
+    await chmod(fakeCodex, 0o700);
     await writeFile(screenshot, "fake image");
-    process.env.CLAUDE_BIN = fakeClaude;
+    process.env.CODEX_BIN = fakeCodex;
     try {
-      const running = runClaude({
+      const running = runCodex({
         type: "analyze",
         requestId: "ad95bf70-68a2-4b96-b31c-6b171ea53db8",
         screenshotDataUrl: "data:image/png;base64,abc",
         question: "What is shown?"
       }, directory, screenshot);
-      await expect(running.result).resolves.toBe("The fake Claude saw the screenshot.");
+      await expect(running.result).resolves.toBe("The fake Codex saw the screenshot.");
     } finally {
       await rm(directory, { recursive: true, force: true });
     }

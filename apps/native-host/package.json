@@ -9,7 +9,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "install:host": "pnpm build && sh install/install-macos.sh",
-    "spike": "tsx src/spike.ts"
+    "spike": "node --import tsx src/spike.ts"
   },
   "dependencies": {
     "@screen-assistant/protocol": "workspace:*",

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Screen Assistant",
   "version": "0.1.0",
-  "description": "Ask your local Claude CLI questions about the visible Firefox tab.",
+  "description": "Ask your local Codex CLI questions about the visible Firefox tab.",
   "permissions": ["activeTab", "nativeMessaging", "storage", "scripting"],
   "background": { "scripts": ["background.js"] },
   "action": {
@@ -30,4 +30,3 @@
     }
   }
 }
-

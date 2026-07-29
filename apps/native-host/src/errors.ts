@@ -10,6 +10,5 @@ export class HostError extends Error {
 export function normalizeError(error: unknown): HostError {
   if (error instanceof HostError) return error;
   const message = error instanceof Error ? error.message : "Unknown native host error";
-  return new HostError("CLAUDE_FAILED", message);
+  return new HostError("CODEX_FAILED", message);
 }
-

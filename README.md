@@ -1,20 +1,19 @@
 # Screen Assistant
 
-A Firefox sidebar that captures the visible tab and asks the locally authenticated Claude CLI about it. The extension never embeds an API key and never exposes an HTTP server.
+A Firefox sidebar that captures the visible tab and asks the locally authenticated Codex CLI about it. The extension never embeds an API key and never exposes an HTTP server.
 
 ## Prerequisites
 
 - macOS and Firefox 126+
 - Node.js 20+
 - pnpm
-- Claude Code CLI available as `claude`
+- Codex CLI available as `codex`
 - ImageMagick (`magick`) only for the feasibility spike
 
-Authenticate Claude before using the extension:
+Authenticate Codex before using the extension:
 
 ```sh
-claude
-/login
+codex login
 ```
 
 ## Quick start
@@ -38,30 +37,32 @@ Run `pnpm dev` while working on the sidebar. Rebuild and reload the temporary ad
 
 ## What the vision spike proves
 
-`pnpm spike` generates a known image in a random temporary directory, starts Claude in that directory, permits only the `Read` tool, and verifies that Claude reads the visible exit code. Do not treat the image path mechanism as working on a machine until this command passes.
+`pnpm spike` generates a known image in a random temporary directory, attaches it with Codex CLI's `--image` flag, and verifies that Codex reads the visible exit code. Do not treat the image mechanism as working on a machine until this command passes.
 
 The current CLI invocation is equivalent to:
 
 ```text
-claude -p <controlled prompt> \
-  --output-format json \
-  --no-session-persistence \
-  --permission-mode dontAsk \
-  --tools Read
+codex exec --image <generated screenshot> \
+  --sandbox read-only \
+  --ephemeral \
+  --ignore-user-config \
+  --ignore-rules \
+  --output-last-message <generated answer file> \
+  <controlled prompt>
 ```
 
 ## Safety model
 
 - Incoming messages are validated and bounded.
 - JPEG/PNG screenshots are decoded into a random application-owned temp directory.
-- Claude starts with `shell: false`, never receives user-controlled process arguments, and has only the `Read` tool.
-- Claude never runs in this repository or another user project.
+- Codex starts with `shell: false`; the user question is contained in a controlled prompt argument rather than a shell command.
+- Codex runs ephemerally with a read-only sandbox, ignored user/project behavior configuration, and a random isolated working directory.
 - Screenshot and session directory deletion happens in a `finally` block.
 - Only one analysis may run at once; each analysis has a 90-second timeout and can be cancelled.
 - Native Messaging authorizes only `screen-assistant@marogie.dev`.
 - Native-host protocol output is the only data written to stdout; logs use stderr.
 
-Page text is treated as untrusted input. This reduces prompt-injection exposure, but any visible screen sent to Claude should still be considered disclosed to the user’s configured Claude service.
+Page text is treated as untrusted input. This reduces prompt-injection exposure, but any visible screen sent to Codex should still be considered disclosed to the user’s configured OpenAI service.
 
 ## Useful commands
 
@@ -88,4 +89,3 @@ packages/protocol        Shared Zod schemas and TypeScript protocol types
 ## Known constraint
 
 Temporary Firefox add-ons are removed when Firefox exits. Packaging/signing and a polished installer are intentionally outside the MVP.
-

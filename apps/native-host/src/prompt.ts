@@ -8,8 +8,7 @@ export function buildPrompt(request: AnalyzeRequest, screenshotFileName: string)
   const context = request.pageContext;
   return `You are analyzing a screenshot captured from the user's active Firefox tab.
 
-Use the Read tool to inspect this screenshot file before answering:
-./${screenshotFileName}
+The screenshot is attached as ${screenshotFileName}. Inspect it before answering.
 
 User question:
 ${request.question}
@@ -32,6 +31,5 @@ Instructions:
 - Do not claim to see information that is unreadable.
 - Distinguish observations from assumptions.
 - Answer directly and provide the next practical action when useful.
-- Do not modify files, execute commands, use the network, or invoke other tools.`;
+- Do not modify files, execute commands, use the network, or invoke tools.`;
 }
-

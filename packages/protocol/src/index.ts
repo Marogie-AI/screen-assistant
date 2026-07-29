@@ -34,10 +34,10 @@ export const nativeRequestSchema = z.discriminatedUnion("type", [
 export const errorCodeSchema = z.enum([
   "NATIVE_HOST_NOT_INSTALLED",
   "NATIVE_HOST_DISCONNECTED",
-  "CLAUDE_NOT_INSTALLED",
-  "CLAUDE_NOT_AUTHENTICATED",
-  "CLAUDE_TIMEOUT",
-  "CLAUDE_FAILED",
+  "CODEX_NOT_INSTALLED",
+  "CODEX_NOT_AUTHENTICATED",
+  "CODEX_TIMEOUT",
+  "CODEX_FAILED",
   "SCREENSHOT_FAILED",
   "SCREENSHOT_TOO_LARGE",
   "INVALID_REQUEST",
@@ -53,4 +53,3 @@ export type NativeRequest = z.infer<typeof nativeRequestSchema>;
 export type AnalyzeResponse =
   | { type: "result"; requestId: string; answer: string }
   | { type: "error"; requestId: string; code: ErrorCode; message: string };
-
