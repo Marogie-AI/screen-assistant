@@ -15,12 +15,12 @@
     "default_icon": "icons/icon.svg"
   },
   "commands": {
-    "capture-screen": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Ctrl+Shift+A",
         "mac": "Command+Shift+A"
       },
-      "description": "Capture and analyze the current tab"
+      "description": "Open Screen Assistant and capture the current tab"
     }
   },
   "browser_specific_settings": {

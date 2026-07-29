@@ -37,7 +37,10 @@ async function captureCurrentTab(): Promise<void> {
     await browser.storage.local.set({ currentCapture: capture, captureError: null });
     await browser.sidebarAction.open();
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Firefox could not capture this page.";
+    const detail = error instanceof Error ? error.message : "Firefox could not capture this page.";
+    const message = /activeTab permission/i.test(detail)
+      ? "Firefox needs a fresh tab grant. Close the sidebar, then use Command + Shift + A or the toolbar icon on the page you want to capture."
+      : detail;
     await browser.storage.local.set({ captureError: message });
     console.error("Screenshot failed:", error);
     try { await browser.sidebarAction.open(); } catch { /* Sidebar API can reject outside a user gesture. */ }
@@ -53,10 +56,6 @@ async function beginCapture(): Promise<void> {
   }
   await captureCurrentTab();
 }
-
-browser.commands.onCommand.addListener(command => {
-  if (command === "capture-screen") void beginCapture();
-});
 
 browser.action.onClicked.addListener(() => void beginCapture());
 
