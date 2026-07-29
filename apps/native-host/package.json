@@ -5,7 +5,7 @@
   "type": "module",
   "bin": { "screen-assistant-host": "dist/index.js" },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --platform node --target node20 --clean",
+    "build": "tsup",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "install:host": "pnpm build && sh install/install-macos.sh",
