@@ -1,96 +1,131 @@
 # Screen Assistant
 
-A Firefox sidebar that captures the visible tab and asks the locally authenticated Codex CLI about it. The extension never embeds an API key and never exposes an HTTP server.
+[![CI](https://github.com/Marogie-AI/screen-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/Marogie-AI/screen-assistant/actions/workflows/ci.yml)
 
-Each successful Codex answer is automatically copied to the system clipboard and remains visible in the sidebar.
-Choosing **Recapture & analyze** captures the current tab and immediately reruns the most recent question against the fresh screenshot.
-The keyboard shortcut and toolbar action also analyze immediately, reusing the last question or defaulting to **Analyze this screen.**
+A privacy-conscious Firefox assistant from **Marogie AI for Students**. Capture the visible tab, ask a question with the locally authenticated Codex CLI, and receive a concise answer without embedding an API key or exposing a local HTTP server.
 
-## Prerequisites
+> **Project status:** Early access for macOS and Firefox 126+. The extension is loaded as a temporary Firefox add-on while packaging and signing are being prepared.
 
-- macOS and Firefox 126+
-- Node.js 20+
-- pnpm
-- Codex CLI available as `codex`
-- ImageMagick (`magick`) only for the feasibility spike
+## Highlights
 
-Authenticate Codex before using the extension:
+- **One-shortcut workflow:** <kbd>Control</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> captures the visible tab and starts analysis.
+- **Fast repeat analysis:** Shortcut and toolbar captures reuse the most recent question; **Recapture & analyze** does the same from the sidebar.
+- **Clipboard delivery:** Successful answers are copied to the system clipboard automatically and remain visible in the sidebar.
+- **Local authentication:** The native host delegates to the user's existing Codex CLI session. No API key is stored in the extension.
+- **Bounded data handling:** Screenshots live in random temporary directories, requests are schema-validated, and Codex runs ephemerally with a read-only sandbox.
+- **Regression protection:** Type checks, tests, production builds, and the Firefox background-bundle format run in one quality gate.
+
+## How it works
+
+```text
+Firefox action or shortcut
+        │
+        ▼
+Visible-tab capture + bounded page context
+        │
+        ▼
+Firefox Native Messaging
+        │
+        ▼
+Local native host ──► authenticated Codex CLI
+        │
+        ▼
+Sidebar answer + system clipboard
+```
+
+The extension and native host communicate only through Firefox Native Messaging. See [Architecture](docs/ARCHITECTURE.md) for trust boundaries, protocol details, and design constraints.
+
+## Requirements
+
+- macOS
+- Firefox 126 or newer
+- Node.js 20 or newer
+- pnpm 9.15.1
+- [Codex CLI](https://developers.openai.com/codex/cli/) available as `codex`
+- ImageMagick (`magick`) only when running the optional vision spike
+
+Authenticate Codex before installing the native host:
 
 ```sh
 codex login
 ```
 
-## Quick start
+## Install for local use
 
 ```sh
-pnpm install
-pnpm spike
+corepack enable
+pnpm install --frozen-lockfile
 pnpm check
 pnpm install:host
 ```
 
-Then load the extension temporarily:
+Load the extension in Firefox:
 
-1. Open `about:debugging#/runtime/this-firefox` in Firefox.
+1. Open `about:debugging#/runtime/this-firefox`.
 2. Select **Load Temporary Add-on**.
-3. Choose `apps/firefox-extension/dist/manifest.json`.
-4. Press <kbd>Control</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> on a normal webpage.
-5. Accept the one-time sensitive-data warning, enter a question, and send it.
+3. Choose `apps/firefox-extension/dist/manifest.json` from this repository.
+4. Open a normal webpage and press <kbd>Control</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>.
+5. Review and accept the one-time sensitive-data notice.
 
-Run `pnpm dev` while working on the sidebar. Rebuild and reload the temporary add-on after background or manifest changes.
+The first shortcut capture uses **Analyze this screen.** Subsequent captures reuse the most recent question. When Codex finishes, the answer appears in a light-gray bubble at the lower-right of the sidebar and is copied to the clipboard.
 
-## What the vision spike proves
+Firefox removes temporary add-ons when it exits. Repeat steps 1–3 after restarting Firefox.
 
-`pnpm spike` generates a known image in a random temporary directory, attaches it with Codex CLI's `--image` flag, and verifies that Codex reads the visible exit code. Do not treat the image mechanism as working on a machine until this command passes.
-
-The current CLI invocation is equivalent to:
-
-```text
-codex exec --image <generated screenshot> \
-  --sandbox read-only \
-  --ephemeral \
-  --ignore-user-config \
-  --ignore-rules \
-  --output-last-message <generated answer file> \
-  <controlled prompt>
-```
-
-## Safety model
-
-- Incoming messages are validated and bounded.
-- JPEG/PNG screenshots are decoded into a random application-owned temp directory.
-- Codex starts with `shell: false`; the user question is contained in a controlled prompt argument rather than a shell command.
-- Codex runs ephemerally with a read-only sandbox, ignored user/project behavior configuration, and a random isolated working directory.
-- Screenshot and session directory deletion happens in a `finally` block.
-- Only one analysis may run at once; each analysis has a 90-second timeout and can be cancelled.
-- Native Messaging authorizes only `screen-assistant@marogie.dev`.
-- Native-host protocol output is the only data written to stdout; logs use stderr.
-- The Firefox extension requests `<all_urls>` so visible-tab capture and optional text extraction work reliably. It does not run persistent content scripts; access is used only when the user captures or recaptures.
-
-Page text is treated as untrusted input. This reduces prompt-injection exposure, but any visible screen sent to Codex should still be considered disclosed to the user’s configured OpenAI service.
-
-## Useful commands
+## Development
 
 ```sh
-pnpm dev             # Vite development build
-pnpm build           # Build protocol, extension, and native host
-pnpm test            # Unit tests
-pnpm typecheck       # TypeScript checks
-pnpm check           # Typecheck, test, and production build
-pnpm spike           # Verify local CLI image reading
-pnpm install:host    # Build and install the macOS native host
+pnpm dev          # Run the sidebar's Vite development build
+pnpm typecheck    # Type-check all workspaces
+pnpm test         # Run all unit and flow tests
+pnpm build        # Create production extension and native-host builds
+pnpm check        # Run the complete local/CI quality gate
+pnpm install:host # Rebuild and install the macOS native host
+pnpm smoke:host   # Verify the installed host with a real Codex request
+pnpm spike        # Verify that Codex can inspect an attached image
 ```
 
-To inspect native-host logs while Firefox is running, launch Firefox from a terminal during development. Firefox owns the native host process and forwards host stderr to its diagnostics.
+Rebuild and click **Reload** in `about:debugging` after changing the background script, manifest, or production assets.
 
-## Repository map
+### Repository structure
 
 ```text
-apps/firefox-extension   Firefox background script and React sidebar
-apps/native-host         Native Messaging host, installer, tests, CLI spike
-packages/protocol        Shared Zod schemas and TypeScript protocol types
+apps/firefox-extension  Firefox background script and React sidebar
+apps/native-host        Native Messaging host, macOS installer, and CLI bridge
+packages/protocol       Shared Zod schemas and protocol types
+scripts                 Installed-host smoke checks
+docs                    Architecture and operational documentation
 ```
 
-## Known constraint
+## Privacy and security
 
-Temporary Firefox add-ons are removed when Firefox exits. Packaging/signing and a polished installer are intentionally outside the MVP.
+Screen content is transmitted to the user's configured OpenAI service through Codex only after the one-time warning is accepted. Before capturing, check for passwords, private messages, financial information, health data, and other sensitive content.
+
+The extension requests access to webpages so it can capture the visible tab and extract optional page text after a user action. It does not install persistent content scripts. Page text and screenshots are treated as untrusted input and are never allowed to change the native host's execution policy.
+
+For the complete security model, read [Architecture](docs/ARCHITECTURE.md). To report a vulnerability, follow [Security Policy](SECURITY.md).
+
+## Responsible student use
+
+Screen Assistant is intended to support learning, accessibility, and comprehension. Follow your school or university's academic-integrity rules. Do not use it in examinations or assessments where AI assistance is prohibited, and ask for explanations when learning matters more than obtaining a final answer.
+
+## Troubleshooting
+
+### The shortcut does nothing
+
+Rebuild with `pnpm build`, then reload the add-on in `about:debugging`. Firefox must load the generated `apps/firefox-extension/dist/manifest.json`, not the source manifest.
+
+### Firefox cannot find the native host
+
+Run `pnpm install:host`, reload the add-on, and retry. The installer pins the current Node and Codex executable paths in `~/.screen-assistant`.
+
+### Codex is not authenticated
+
+Run `codex login`, then verify the integration with `pnpm smoke:host`.
+
+### The answer is not copied
+
+Reload the add-on so Firefox applies the `clipboardWrite` permission. The sidebar keeps the answer visible and reports clipboard failures separately.
+
+## Contributing
+
+Read [Contributing Guide](CONTRIBUTING.md) before opening a pull request. Every change must keep `pnpm check` green.
