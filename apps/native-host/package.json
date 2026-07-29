@@ -1,0 +1,24 @@
+{
+  "name": "@screen-assistant/native-host",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": { "screen-assistant-host": "dist/index.js" },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --platform node --target node20 --clean",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "install:host": "pnpm build && sh install/install-macos.sh",
+    "spike": "tsx src/spike.ts"
+  },
+  "dependencies": {
+    "@screen-assistant/protocol": "workspace:*",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.17.0",
+    "tsx": "^4.20.3",
+    "tsup": "^8.5.0",
+    "vitest": "^3.2.4"
+  }
+}

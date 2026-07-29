@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Screen Assistant",
+  "version": "0.1.0",
+  "description": "Ask your local Claude CLI questions about the visible Firefox tab.",
+  "permissions": ["activeTab", "nativeMessaging", "storage", "scripting"],
+  "background": { "scripts": ["background.js"] },
+  "action": {
+    "default_title": "Analyze current screen",
+    "default_icon": "icons/icon.svg"
+  },
+  "sidebar_action": {
+    "default_title": "Screen Assistant",
+    "default_panel": "sidebar.html",
+    "default_icon": "icons/icon.svg"
+  },
+  "commands": {
+    "capture-screen": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+A",
+        "mac": "Command+Shift+A"
+      },
+      "description": "Capture and analyze the current tab"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "screen-assistant@marogie.dev",
+      "strict_min_version": "126.0"
+    }
+  }
+}
+

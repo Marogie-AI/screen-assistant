@@ -1,0 +1,8 @@
+{
+  "name": "dev.marogie.screen_assistant",
+  "description": "Native host for Screen Assistant",
+  "path": "__HOST_PATH__",
+  "type": "stdio",
+  "allowed_extensions": ["screen-assistant@marogie.dev"]
+}
+
