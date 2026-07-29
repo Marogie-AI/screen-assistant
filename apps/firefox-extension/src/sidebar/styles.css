@@ -19,7 +19,7 @@ header { display: flex; align-items: center; justify-content: space-between; }
 .capture-meta { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 9px 11px; color: #6b6476; font-size: 11px; }
 .capture-meta > span:nth-child(2) { min-width: 0; flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #2db67c; }
-.conversation { display: flex; flex: 1; flex-direction: column; gap: 12px; min-height: 80px; }
+.conversation { display: flex; flex: 1; flex-direction: column; justify-content: flex-end; gap: 12px; min-height: 80px; }
 .hint { margin: auto; max-width: 230px; color: #898292; text-align: center; font-size: 13px; line-height: 1.45; }
 .message { max-width: 90%; }
 .message > span { display: block; margin: 0 0 4px 3px; color: #8b8494; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
@@ -27,7 +27,9 @@ header { display: flex; align-items: center; justify-content: space-between; }
 .message.user { align-self: flex-end; }
 .message.user > span { text-align: right; margin-right: 3px; }
 .message.user p { color: white; background: #6d4aff; border-bottom-right-radius: 4px; }
-.message.assistant p { background: white; border: 1px solid #e4e0e9; border-bottom-left-radius: 4px; }
+.message.assistant { align-self: flex-end; }
+.message.assistant > span { margin-right: 3px; text-align: right; }
+.message.assistant p { background: #eeeef1; border: 1px solid #dedee4; border-bottom-right-radius: 4px; }
 .thinking { color: #746d7f; animation: pulse 1.3s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: .48; } }
 form { position: sticky; bottom: 0; display: flex; gap: 8px; padding: 8px; border: 1px solid #dcd7e5; border-radius: 14px; background: white; box-shadow: 0 8px 28px #2c204719; }
@@ -36,6 +38,7 @@ textarea { width: 100%; min-width: 0; resize: none; border: 0; outline: 0; paddi
 .send:disabled { opacity: .35; cursor: default; }
 .cancel { align-self: end; border: 0; border-radius: 9px; padding: 8px 10px; color: #9d3042; background: #fff0f2; font-size: 12px; }
 .error { display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; border: 1px solid #f1cbd1; border-radius: 11px; color: #8b293a; background: #fff2f4; font-size: 12px; line-height: 1.4; }
+.clipboard-status { color: #257552; font-size: 12px; text-align: center; }
 .empty, .warning-screen { align-items: center; justify-content: center; text-align: center; }
 .empty { display: flex; flex: 1; flex-direction: column; min-height: 320px; }
 .empty-icon { color: #6d4aff; font-size: 42px; }

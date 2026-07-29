@@ -4,6 +4,7 @@ type Capture = {
   screenshot: string;
   pageContext?: PageContext;
   capturedAt: number;
+  autoAnalyzeAt?: number;
 };
 
 async function collectPageContext(tabId: number): Promise<PageContext | undefined> {
@@ -24,15 +25,17 @@ async function collectPageContext(tabId: number): Promise<PageContext | undefine
   }
 }
 
-async function captureCurrentTab(): Promise<void> {
+async function captureCurrentTab(autoAnalyze = false): Promise<void> {
   try {
     const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
     if (!tab?.id || tab.windowId === undefined) throw new Error("No active tab is available.");
     const screenshot = await browser.tabs.captureVisibleTab(tab.windowId, { format: "jpeg", quality: 85 });
+    const capturedAt = Date.now();
     const capture: Capture = {
       screenshot,
       pageContext: await collectPageContext(tab.id),
-      capturedAt: Date.now()
+      capturedAt,
+      ...(autoAnalyze ? { autoAnalyzeAt: capturedAt } : {})
     };
     await browser.storage.local.set({ currentCapture: capture, captureError: null });
     await browser.sidebarAction.open();
@@ -50,7 +53,7 @@ async function captureCurrentTab(): Promise<void> {
 async function beginCapture(): Promise<void> {
   // Capture while Firefox's trusted action still owns the activeTab grant.
   // The sidebar blocks transmission to Codex until consent is acknowledged.
-  await captureCurrentTab();
+  await captureCurrentTab(true);
 }
 
 browser.action.onClicked.addListener(() => void beginCapture());

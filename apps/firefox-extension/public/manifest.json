@@ -3,7 +3,7 @@
   "name": "Screen Assistant",
   "version": "0.1.0",
   "description": "Ask your local Codex CLI questions about the visible Firefox tab.",
-  "permissions": ["activeTab", "nativeMessaging", "storage", "scripting"],
+  "permissions": ["activeTab", "clipboardWrite", "nativeMessaging", "storage", "scripting"],
   "host_permissions": ["<all_urls>"],
   "background": { "scripts": ["background.js"] },
   "action": {

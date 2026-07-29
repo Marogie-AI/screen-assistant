@@ -2,6 +2,10 @@
 
 A Firefox sidebar that captures the visible tab and asks the locally authenticated Codex CLI about it. The extension never embeds an API key and never exposes an HTTP server.
 
+Each successful Codex answer is automatically copied to the system clipboard and remains visible in the sidebar.
+Choosing **Recapture & analyze** captures the current tab and immediately reruns the most recent question against the fresh screenshot.
+The keyboard shortcut and toolbar action also analyze immediately, reusing the last question or defaulting to **Analyze this screen.**
+
 ## Prerequisites
 
 - macOS and Firefox 126+
