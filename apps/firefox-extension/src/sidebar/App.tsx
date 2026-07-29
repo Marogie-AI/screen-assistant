@@ -109,7 +109,7 @@ export function App() {
           <div className="empty-icon">⌗</div>
           <h1>Capture a browser tab</h1>
           <p>Use <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>A</kbd> or the toolbar button to start.</p>
-          <p className="muted">The sidebar cannot request tab access by itself.</p>
+          <button className="primary" onClick={() => void browser.runtime.sendMessage({ type: "capture" })}>Capture current tab</button>
         </section>
       ) : (
         <>
@@ -118,7 +118,7 @@ export function App() {
             <div className="capture-meta">
               <span className="status-dot" />
               <span>{capture.pageContext?.title || "Current tab"}</span>
-              <span className="recapture-hint">Use ⌘⇧A to recapture</span>
+              <button className="quiet" onClick={() => void browser.runtime.sendMessage({ type: "capture" })}>Recapture</button>
             </div>
           </section>
 

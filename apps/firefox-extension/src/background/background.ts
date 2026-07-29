@@ -39,7 +39,7 @@ async function captureCurrentTab(): Promise<void> {
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Firefox could not capture this page.";
     const message = /activeTab permission/i.test(detail)
-      ? "Firefox needs a fresh tab grant. Close the sidebar, then use Command + Shift + A or the toolbar icon on the page you want to capture."
+      ? "Firefox has not applied the extension's webpage permission. Remove and load the temporary add-on again from about:debugging."
       : detail;
     await browser.storage.local.set({ captureError: message });
     console.error("Screenshot failed:", error);

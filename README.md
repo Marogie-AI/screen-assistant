@@ -61,6 +61,7 @@ codex exec --image <generated screenshot> \
 - Only one analysis may run at once; each analysis has a 90-second timeout and can be cancelled.
 - Native Messaging authorizes only `screen-assistant@marogie.dev`.
 - Native-host protocol output is the only data written to stdout; logs use stderr.
+- The Firefox extension requests `<all_urls>` so visible-tab capture and optional text extraction work reliably. It does not run persistent content scripts; access is used only when the user captures or recaptures.
 
 Page text is treated as untrusted input. This reduces prompt-injection exposure, but any visible screen sent to Codex should still be considered disclosed to the user’s configured OpenAI service.
 
