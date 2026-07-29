@@ -2,6 +2,7 @@
   "name": "screen-assistant",
   "version": "0.1.0",
   "description": "A privacy-conscious Firefox screen assistant powered by the locally authenticated Codex CLI.",
+  "license": "MIT",
   "private": true,
   "packageManager": "pnpm@9.15.1",
   "engines": {

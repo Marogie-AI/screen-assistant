@@ -1,6 +1,7 @@
 # Screen Assistant
 
 [![CI](https://github.com/Marogie-AI/screen-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/Marogie-AI/screen-assistant/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A privacy-conscious Firefox assistant from **Marogie AI for Students**. Capture the visible tab, ask a question with the locally authenticated Codex CLI, and receive a concise answer without embedding an API key or exposing a local HTTP server.
 
@@ -128,4 +129,8 @@ Reload the add-on so Firefox applies the `clipboardWrite` permission. The sideba
 
 ## Contributing
 
-Read [Contributing Guide](CONTRIBUTING.md) before opening a pull request. Every change must keep `pnpm check` green.
+Read the [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before opening a pull request. Every change must keep `pnpm check` green. For usage help, see [Support](SUPPORT.md); notable changes are tracked in the [Changelog](CHANGELOG.md).
+
+## License
+
+Screen Assistant is available under the [MIT License](LICENSE).
