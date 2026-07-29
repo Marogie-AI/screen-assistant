@@ -1,8 +1,12 @@
 {
   "name": "screen-assistant",
   "version": "0.1.0",
+  "description": "A privacy-conscious Firefox screen assistant powered by the locally authenticated Codex CLI.",
   "private": true,
   "packageManager": "pnpm@9.15.1",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "pnpm -r build",
     "dev": "pnpm --filter @screen-assistant/firefox-extension dev",
@@ -10,6 +14,7 @@
     "test": "pnpm -r test",
     "check": "pnpm typecheck && pnpm test && pnpm build",
     "install:host": "pnpm --filter @screen-assistant/native-host install:host",
+    "smoke:host": "node scripts/smoke-installed-host.mjs",
     "spike": "pnpm --filter @screen-assistant/native-host spike"
   },
   "devDependencies": {
