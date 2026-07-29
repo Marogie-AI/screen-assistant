@@ -35,10 +35,9 @@ export function App() {
     return () => browser.storage.onChanged.removeListener(listener);
   }, []);
 
-  async function acceptAndCapture() {
-    await browser.storage.local.set({ consentAcknowledged: true, pendingCapture: false });
+  async function acceptCapture() {
+    await browser.storage.local.set({ consentAcknowledged: true });
     setConsented(true);
-    await browser.runtime.sendMessage({ type: "capture" });
   }
 
   async function submit(event: FormEvent) {
@@ -90,9 +89,9 @@ export function App() {
         <section className="warning-card">
           <span className="warning-icon">◉</span>
           <h1>Check the screen before sharing</h1>
-          <p>This extension sends the visible browser screen and selected page context to your locally installed Codex CLI.</p>
+          <p>The screen was captured locally. It is sent to your Codex CLI only after you ask a question.</p>
           <p>Review the screen for passwords, private messages, financial information, and personal data.</p>
-          <button className="primary" onClick={() => void acceptAndCapture()}>I understand — capture screen</button>
+          <button className="primary" onClick={() => void acceptCapture()}>I understand — continue</button>
         </section>
       </main>
     );
@@ -110,7 +109,7 @@ export function App() {
           <div className="empty-icon">⌗</div>
           <h1>Capture a browser tab</h1>
           <p>Use <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>A</kbd> or the toolbar button to start.</p>
-          <button className="primary" onClick={() => void browser.runtime.sendMessage({ type: "capture" })}>Capture current tab</button>
+          <p className="muted">The sidebar cannot request tab access by itself.</p>
         </section>
       ) : (
         <>
@@ -119,7 +118,7 @@ export function App() {
             <div className="capture-meta">
               <span className="status-dot" />
               <span>{capture.pageContext?.title || "Current tab"}</span>
-              <button className="quiet" onClick={() => void browser.runtime.sendMessage({ type: "capture" })}>Recapture</button>
+              <span className="recapture-hint">Use ⌘⇧A to recapture</span>
             </div>
           </section>
 

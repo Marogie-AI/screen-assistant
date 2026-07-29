@@ -48,12 +48,8 @@ async function captureCurrentTab(): Promise<void> {
 }
 
 async function beginCapture(): Promise<void> {
-  const { consentAcknowledged } = await browser.storage.local.get("consentAcknowledged");
-  if (!consentAcknowledged) {
-    await browser.storage.local.set({ pendingCapture: true });
-    await browser.sidebarAction.open();
-    return;
-  }
+  // Capture while Firefox's trusted action still owns the activeTab grant.
+  // The sidebar blocks transmission to Codex until consent is acknowledged.
   await captureCurrentTab();
 }
 
