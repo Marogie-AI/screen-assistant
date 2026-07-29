@@ -11,9 +11,10 @@
   "scripts": {
     "build": "pnpm -r build",
     "dev": "pnpm --filter @screen-assistant/firefox-extension dev",
+    "docs:check": "node scripts/check-markdown.mjs",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
-    "check": "pnpm typecheck && pnpm test && pnpm build",
+    "check": "pnpm docs:check && pnpm typecheck && pnpm test && pnpm build",
     "install:host": "pnpm --filter @screen-assistant/native-host install:host",
     "smoke:host": "node scripts/smoke-installed-host.mjs",
     "spike": "pnpm --filter @screen-assistant/native-host spike"
