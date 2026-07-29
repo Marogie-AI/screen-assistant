@@ -108,7 +108,7 @@ export function App() {
         <section className="empty">
           <div className="empty-icon">⌗</div>
           <h1>Capture a browser tab</h1>
-          <p>Use <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>A</kbd> or the toolbar button to start.</p>
+          <p>Use <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>Y</kbd> or the toolbar button to start.</p>
           <button className="primary" onClick={() => void browser.runtime.sendMessage({ type: "capture" })}>Capture current tab</button>
         </section>
       ) : (

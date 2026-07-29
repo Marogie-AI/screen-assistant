@@ -30,7 +30,7 @@ Then load the extension temporarily:
 1. Open `about:debugging#/runtime/this-firefox` in Firefox.
 2. Select **Load Temporary Add-on**.
 3. Choose `apps/firefox-extension/dist/manifest.json`.
-4. Press <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd> on a normal webpage.
+4. Press <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>Y</kbd> on a normal webpage.
 5. Accept the one-time sensitive-data warning, enter a question, and send it.
 
 Run `pnpm dev` while working on the sidebar. Rebuild and reload the temporary add-on after background or manifest changes.
