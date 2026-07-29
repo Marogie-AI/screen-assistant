@@ -11,6 +11,8 @@ HOST_JS="$BIN_DIR/native-host.js"
 HOST_MANIFEST="$HOST_DIR/dev.marogie.screen_assistant.json"
 NODE_BIN=$(command -v node)
 CODEX_BIN=$(command -v codex)
+NODE_DIR=$(dirname "$NODE_BIN")
+CODEX_DIR=$(dirname "$CODEX_BIN")
 
 mkdir -p "$BIN_DIR" "$HOST_DIR"
 cp "$APP_DIR/dist/index.js" "$HOST_JS"
@@ -18,6 +20,7 @@ chmod 600 "$HOST_JS"
 sed \
   -e "s|__NODE_BIN__|$NODE_BIN|g" \
   -e "s|__CODEX_BIN__|$CODEX_BIN|g" \
+  -e "s|__RUNTIME_PATH__|$NODE_DIR:$CODEX_DIR:/usr/bin:/bin|g" \
   -e "s|__HOST_JS__|$HOST_JS|g" \
   "$SCRIPT_DIR/native-host-wrapper.sh" > "$HOST_BIN"
 chmod 700 "$HOST_BIN"
@@ -29,4 +32,3 @@ echo "Installed native host: $HOST_BIN"
 echo "Pinned Node: $NODE_BIN"
 echo "Pinned Codex: $CODEX_BIN"
 echo "Installed Firefox manifest: $HOST_MANIFEST"
-
